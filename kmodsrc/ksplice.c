@@ -3292,7 +3292,8 @@ static bool is_stop_machine(const struct task_struct *t)
 {
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27)
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,28)
-	const char *kstop_prefix = "kstop/";
+	//const char *kstop_prefix = "kstop/";
+	const char *kstop_prefix = "migration/";
 #else /* LINUX_VERSION_CODE < */
 /* c9583e55fa2b08a230c549bd1e3c0bde6c50d9cc was after 2.6.27 */
 	const char *kstop_prefix = "kstop";

@@ -17,7 +17,10 @@
 
 #if defined(_ASM_X86_PROCESSOR_H) || \
     defined(__ASM_X86_PROCESSOR_H)	/* New unified x86 */
-#define KSPLICE_IP(x) ((x)->thread.ip)
+//#define KSPLICE_IP(x) ((x)->thread.ip)
+extern const char thread_return[];
+EXTRACT_SYMBOL(thread_return);
+#define KSPLICE_IP(x) ((unsigned long)thread_return)
 #define KSPLICE_SP(x) ((x)->thread.sp)
 #elif defined(CONFIG_X86_64)	/* Old x86 64-bit */
 /* The IP is on the stack, so we don't need to check it separately.
@@ -34,13 +37,13 @@ EXTRACT_SYMBOL(thread_return);
 
 #ifndef CONFIG_FUNCTION_DATA_SECTIONS
 #include "udis86.h"
-#ifdef CONFIG_FTRACE
+#ifdef CONFIG_FUNCTION_TRACER
 #include <asm/ftrace.h>
 #include <linux/ftrace.h>
 
 extern ftrace_func_t ftrace_trace_function;
 EXTRACT_SYMBOL(ftrace_trace_function);
-#endif /* CONFIG_FTRACE */
+#endif /* CONFIG_FUNCTION_TRACER */
 
 #define N_BITS(n) ((n) < sizeof(long) * 8 ? ~(~0L << (n)) : ~0L)
 
@@ -572,7 +575,7 @@ static void initialize_ksplice_ud(struct ud *ud)
 	ud_set_vendor(ud, UD_VENDOR_ANY);
 }
 
-#ifdef CONFIG_FTRACE
+#ifdef CONFIG_FUNCTION_TRACER
 static bool is_mcount_call(struct ud *ud, const unsigned char *addr)
 {
 	const void *target =
@@ -582,12 +585,12 @@ static bool is_mcount_call(struct ud *ud, const unsigned char *addr)
 		return true;
 	return false;
 }
-#else /* !CONFIG_FTRACE */
+#else /* !CONFIG_FUNCTION_TRACER */
 static bool is_mcount_call(struct ud *ud, const unsigned char *addr)
 {
 	return false;
 }
-#endif /* CONFIG_FTRACE */
+#endif /* CONFIG_FUNCTION_TRACER */
 
 static bool is_nop(struct ud *ud, const unsigned char *addr)
 {

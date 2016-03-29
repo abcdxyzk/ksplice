@@ -2887,6 +2887,17 @@ enum supersect_type supersect_type(struct supersect *ss)
 	if (strstarts(ss->name, ".modinfo"))
 		return SS_TYPE_IGNORED;
 
+	/*
+	 * FIXME this is wrong as it breaks dynamic debug lines
+	 * We should do similar stuff to __bug_table below...
+	 */
+	if (strcmp(ss->name, "__verbose") == 0)
+		return SS_TYPE_IGNORED;
+	if (strstarts(ss->name, ".discard"))
+		return SS_TYPE_IGNORED;
+	if (strstarts(ss->name, "__mcount_loc"))
+		return SS_TYPE_IGNORED;
+
 	return SS_TYPE_UNKNOWN;
 }
 

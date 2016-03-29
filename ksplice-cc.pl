@@ -27,7 +27,7 @@ my @cmd;
 foreach (@ARGV) {
 	if (/^-ksplice-cflags-api=1$/) {
 		push @cmd, "-I$dir";
-		push @cmd, qw(-D__DATE__="<{DATE...}>" -D__TIME__="<{TIME}>");
+#		push @cmd, qw(-D__DATE__="<{DATE...}>" -D__TIME__="<{TIME}>");
 	} else {
 		push @cmd, $_;
 	}
