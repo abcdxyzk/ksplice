@@ -2897,6 +2897,8 @@ enum supersect_type supersect_type(struct supersect *ss)
 		return SS_TYPE_IGNORED;
 	if (strstarts(ss->name, ".modinfo"))
 		return SS_TYPE_IGNORED;
+	if (strstarts(ss->name, "__jump_table"))
+		return SS_TYPE_IGNORED;
 
 	return SS_TYPE_UNKNOWN;
 }

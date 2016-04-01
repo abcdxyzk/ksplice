@@ -555,7 +555,7 @@ static bool is_nop(struct ud *ud, const unsigned char *addr)
 		if (ud->operand[0].type == UD_OP_JIMM &&
 		    ud->operand[1].type == UD_NONE &&
 		    ud->operand[2].type == UD_NONE &&
-		    ud_operand_len(&ud->operand[0]) == 1) {
+		    (ud_operand_len(&ud->operand[0]) == 1 || ud_operand_len(&ud->operand[0]) == 4)) {
 			/* struct ud is big so we avoid putting it on the stack.
 			 * This is safe because we are holding module_mutex. */
 			static struct ud temp_ud;
